@@ -1,0 +1,20 @@
+{% extends "account/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <h2>Food</h2>
+    <button class="btn btn-sm btn-outline-primary" id="generate">Generate Meal Plan</button>
+    <button class="btn btn-sm btn-outline-primary" id="favorites">Favorites</button>
+
+
+    <div id="generateView">
+    </div>
+
+    <div id="favoriteView">
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'account/food.js' %}"></script>
+{% endblock %}

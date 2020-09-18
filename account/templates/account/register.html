@@ -1,0 +1,49 @@
+{% extends "account/layout.html" %}
+
+{% block body %}
+
+    <h2>Register</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    <form action="{% url 'register' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <input class="form-control" autofocus type="text" name="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="password" name="confirmation" placeholder="Confirm Password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" type="number" name="age" min="2" max="76" placeholder="age">
+        </div>
+        <div class="form-group">
+            <label>Gender:</label>
+            <select class="form-control" name="gender">
+                <option value="f">Female</option>
+                <option value="m">Male</option>
+              </select>
+        </div>
+        <div class="form-group">
+            <label>Gender:</label>
+            <select class="form-control" name="activeLevel">
+                <option value="s">Sedentary</option>
+                <option value="m">Moderately Active</option>
+                <option value="a">Active</option>
+              </select>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Register">
+    </form>
+
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+
+{% endblock %}

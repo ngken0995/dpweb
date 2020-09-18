@@ -1,0 +1,9 @@
+Account App
+
+feature:
+
+done - 1) login
+done - 2) logout
+done - 3) register
+
+4) index.html should be a homepage which provide a layout of resources from https://www.helpguide.org/home-pages/depression.htm. 

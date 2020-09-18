@@ -1,0 +1,32 @@
+{% extends "account/layout.html" %}
+{% load static %}
+
+{% block body %}
+{% if ask %}
+    <div class="modal" id="modal">
+        <div class="modal-header">
+            <div class="title">Example Modal</div>
+            <button data-close-button class="close-button">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div>
+                What is your happiness scale right now from 1-10?
+            </div>
+            <br>
+            <form action="{% url 'happiness' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit">
+            </form>
+        </div>
+    </div>
+    <div id="overlay"></div>
+{% endif %}
+<div>
+    <a href="{% url 'food' %}">Food</a>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'account/modal.js' %}"></script>
+{% endblock %}
