@@ -77,7 +77,6 @@ def dashboard(request):
     averageDay = 0
     sevenDaysAgo = currentDay - timedelta(days=7)
     averageSevenDays = 0
-    averageThirtyDays = 0
     thirtyDaysAgo = currentDay - timedelta(days=30)
     if Happiness.objects.filter(user = request.user).exists():
         averageDay = Happiness.objects.filter(timestamp__startswith=currentDay.date()).aggregate(Avg('scale'))
@@ -106,7 +105,8 @@ def dashboard(request):
             "form":HappinessForm(),
             "ask":ask,
             "averageDay": averageDay['scale__avg'],
-            "averageSevenDays": averageSevenDays
+             "averageSevenDays": sevenDays['avg'],
+            "averageThirtyDays": thirtyDays['avg']
         })
 
 def index(request):
