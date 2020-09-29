@@ -2,10 +2,64 @@ document.addEventListener('DOMContentLoaded',function() {
     let heart = document.querySelector("path");
     document.querySelector('#generate').addEventListener('click', () => food());
     document.querySelector('#favorites').addEventListener('click', () => favorite());
+    favorite();
     food();
+
+    
 
 
 });
+
+function favorite() {
+    document.querySelector("#generateView").style.display = 'none';
+    document.querySelector("#favoriteView").style.display = 'block';
+    document.querySelector('#favoriteView').innerHTML = '';
+    fetch(`/favoriteView`)
+    .then(response => response.json())
+    .then(foods =>{
+        foods.forEach(food => {
+            const element1 = document.createElement('div');
+            element1.classList.add('flexcontainer2');
+            const pic = document.createElement('div');
+            pic.classList.add('pic2');
+            const img = document.createElement('img');
+            img.classList.add('img2')
+            img.setAttribute('src', `${food.image}`);
+            img.setAttribute('alt', 'na');
+
+            const info = document.createElement('div');
+            info.classList.add('info');
+            const unorderList = document.createElement('ul');
+            const list1 = document.createElement('li');
+            list1.innerHTML = food.title;
+            const list2 = document.createElement('li');
+            list2.innerHTML = food.calories;
+            const list3 = document.createElement('li');
+            list3.innerHTML = food.carbs;
+            const list4 = document.createElement('li');
+            list4.innerHTML = food.fat;
+            const list5 = document.createElement('li');
+            list5.innerHTML = food.protein;
+
+
+            unorderList.append(list1);
+            unorderList.append(list2);
+            unorderList.append(list3);
+            unorderList.append(list4);
+            unorderList.append(list5);
+            info.append(unorderList);
+            pic.append(img);
+            element1.append(pic);
+            element1.append(info);
+            document.querySelector('#favoriteView').append(element1);
+                       
+        });
+        console.log(foods); 
+    })
+    .catch(err => {
+        console.log(err);
+    });
+}
 
 function food() {
     document.querySelector("#generateView").style.display = 'flex';
@@ -122,9 +176,4 @@ function load_food(data) {
     .catch(err => {
         console.log(err);
     });
-}
-
-function favorite() {
-    document.querySelector("#generateView").style.display = 'none';
-    document.querySelector("#favoriteView").style.display = 'block';
 }

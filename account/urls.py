@@ -1,4 +1,4 @@
-from account.views import favoriteStatus
+from account.views import favoriteStatus, favoriteView
 from django.urls import path
 
 from . import views
@@ -13,5 +13,6 @@ urlpatterns = [
     path("happiness", views.happiness, name="happiness"),
     path("food", views.food, name="food"),
     path("food/generate", views.generateMeal, name="generate"),
-    path("favoriteStatus/<int:foodId>", views.favoriteStatus, name="favoriteStatus")
+    path("favoriteStatus/<int:foodId>", views.favoriteStatus, name="favoriteStatus"),
+    path("favoriteView", views.favoriteView, name="favoriteView")
 ]

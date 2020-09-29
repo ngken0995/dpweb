@@ -50,7 +50,20 @@ class Favorite(models.Model):
     image = models.URLField(blank=True, null=True)
     protein = models.CharField(max_length=64)
     title = models.CharField(max_length=64)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "calories": self.calories,
+            "carbs": self.carbs,
+            "fat": self.fat,
+            "food_id": self.food_id,
+            "image": self.image,
+            "protein": self.protein,
+            "title": self.title,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I:%M %p")
+        }
 
 
 

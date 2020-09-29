@@ -25,6 +25,15 @@
 <div>
     <a href="{% url 'food' %}">Food</a>
 </div>
+<div>
+    Average of the day: {{ averageDay }}
+</div>
+<div>
+    Average of the 7 day: {{ averageSevenDays }}
+</div>
+<div>
+    Average of the 30 day: {{ averageThirtyDays }}
+</div>
 {% endblock %}
 
 {% block script %}

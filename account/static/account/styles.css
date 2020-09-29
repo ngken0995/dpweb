@@ -42,6 +42,13 @@ li {
     flex-direction: row;
 }
 
+.flexcontainer2 {
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    margin:5px; 
+}   
+
 .picture {
     width: 65%;
     height: auto;
@@ -49,7 +56,12 @@ li {
     font-family: object-fit\: cover;
 }
 
-img {
+.img2 {
+    width: 312px;
+    height: 231px;
+}
+
+.indexPic {
     width: 100%;
     height: auto;
 }

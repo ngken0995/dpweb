@@ -1,18 +1,29 @@
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.db.models.functions import TruncDate
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
-from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from datetime import datetime, timedelta
+from django.db.models import Avg, Sum
 import json
 
 from .models import Calorie, User, Article, Happiness, Personal, Favorite
 from .forms import HappinessForm
 
+
 # Create your views here.
+def favoriteView(request):
+    foods = Favorite.objects.filter(user=request.user)
+    if foods.exists():
+        foods = foods.order_by("-timestamp").all()
+        return JsonResponse([food.serialize() for food in foods], safe=False)
+    else:
+        return JsonResponse({"message": "No Favorite"})
+
 @csrf_exempt
 def favoriteStatus(request, foodId):
     if request.method == "GET":
@@ -61,19 +72,41 @@ def generateMeal(request):
         return JsonResponse({'min': minValue, 'max': maxValue})
 
 def dashboard(request):
+    now2 = datetime.utcnow()
+    currentDay = datetime(now2.year, now2.month, now2.day)
+    averageDay = 0
+    sevenDaysAgo = currentDay - timedelta(days=7)
+    averageSevenDays = 0
+    averageThirtyDays = 0
+    thirtyDaysAgo = currentDay - timedelta(days=30)
+    if Happiness.objects.filter(user = request.user).exists():
+        averageDay = Happiness.objects.filter(timestamp__startswith=currentDay.date()).aggregate(Avg('scale'))
+
+        sevenDays = Happiness.objects.filter(timestamp__range=(sevenDaysAgo, currentDay + timedelta(days=1))).annotate(date=TruncDate('timestamp')).values('date').annotate(averagePerDay=Avg('scale')).aggregate(avg = Avg('averagePerDay'))
+
+
+        thirtyDays = Happiness.objects.filter(timestamp__range=(thirtyDaysAgo, currentDay + timedelta(days=1))).annotate(date=TruncDate('timestamp')).values('date').annotate(averagePerDay=Avg('scale')).aggregate(avg = Avg('averagePerDay'))
+
+    
+
     if Happiness.objects.filter(user = request.user).exists():
         recentTime = Happiness.objects.filter(user = request.user).order_by('-timestamp').first().timestamp
         now = timezone.now()
         ask = recentTime + timezone.timedelta(hours=2) < now
         return render(request, "account/dashboard.html", {
             "form":HappinessForm(),
-            "ask":ask
+            "ask":ask,
+            "averageDay": averageDay['scale__avg'],
+            "averageSevenDays": sevenDays['avg'],
+            "averageThirtyDays": thirtyDays['avg']
         })
     else:
         ask = True
         return render(request, "account/dashboard.html", {
             "form":HappinessForm(),
-            "ask":ask
+            "ask":ask,
+            "averageDay": averageDay['scale__avg'],
+            "averageSevenDays": averageSevenDays
         })
 
 def index(request):
